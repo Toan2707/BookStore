@@ -1,0 +1,85 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="~/Content//bootstrap.min.css" />
+    <link href="~/Content/BookStore/SOFM.css" rel="stylesheet" />
+    <link href="~/Content/BookStore/HomePage.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/js/all.min.js"></script>
+</head>
+<body>
+    <div class="icon-show" onclick="toggleMenu()">
+        <i class="fa-solid fa-bars"> </i>
+    </div>
+    <nav>
+        <ol id="fm-menu" class="fm-menu">
+            <img class="logo" src="~/image/logoBS.png" />
+            <li class="item-menu">
+                @Html.ActionLink("Account", "AccountList", "Admin")
+            </li>
+            <li class="item-menu">
+                @Html.ActionLink("Book", "BookList", "Admin")
+            </li>
+            <li class="item-menu">
+                @Html.ActionLink("Order", "OrderList", "Admin")
+            </li>
+            <li class="item-menu">
+                @Html.ActionLink("Genre", "CategoryList", "Admin")
+            </li>
+            <li>
+
+                @if (Session["UserName"] == null)
+                {
+                    @Html.ActionLink("Login", "Login", "Login", null, new { @class = "btn btn-danger" })
+                    <span class="fm-text">You do not login</span>
+                }
+                else
+                {
+                    <a>
+                        <img src="@Url.Content(Session["Image"].ToString())"
+                             width="40"
+                             height="40"
+                             style="border-radius:50%;margin-right:10px;" />
+                    </a>
+                    <span class="fm-hello">
+                        Hello: @Session["UserName"]
+                        @Html.ActionLink("Logout", "Logout", "Login", null, new { @class = "fm-login" })
+                    </span>
+                }
+
+            </li>
+        </ol>
+    </nav>
+    <div class="container">
+        <div class="left">
+            <a href="@Url.Action("AccountList","Admin")"
+               class="fm-left-mn">
+                Account
+            </a>
+            <a href="@Url.Action("BookList","Admin")"
+               class="fm-left-mn">
+                Book
+            </a>
+            <a href="@Url.Action("OrderList","Admin")"
+               class="fm-left-mn">
+                Order
+            </a>
+                <a href="@Url.Action("CategoryList","Admin")"
+                   class="fm-left-mn">
+                    Genre
+                </a>
+            </div>
+            <div class="content">
+                @RenderBody()
+            </div>
+        </div>
+    <script>
+        function toggleMenu() {
+            document.getElementById("fm-menu").classList.toggle("fm-menu");
+        }
+    </script>
+</body>
+</html>

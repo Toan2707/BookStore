@@ -1,0 +1,30 @@
+﻿@model Demo1.Models.Account
+@{
+    ViewBag.Title = "Xoá tài khoản";
+    Layout = "~/Views/Shared/Admin.cshtml";
+}
+<h2>Account Delete</h2>
+<link rel="stylesheet" href="~/Content//bootstrap.min.css" />
+<link href="~/Content/BookStore/AdminStyle.css" rel="stylesheet" />
+<link href="~/Content/BookStore/HomePage.css" rel="stylesheet" />
+<link href="~/Content/BookStore/SOFM.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<div class="admin-confirm-box">
+    <p>Bạn có chắc muốn xoá tài khoản <strong>@Model.Username</strong>?</p>
+    <div class="admin-alert admin-alert-error">
+        Thao tác này sẽ xoá <strong>vĩnh viễn</strong> cả tài khoản đăng nhập lẫn thông tin khách hàng
+        (@(Model.Customer != null ? Model.Customer.FullName : "")) liên kết với nó. Không thể hoàn tác.
+    </div>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(m => m.AccountID)
+        <div class="admin-form-actions">
+            <button type="submit" class="btn-admin-delete">Xác nhận xoá</button>
+            @Html.ActionLink("Huỷ", "AccountList", null, new { @class = "btn-admin-ghost" })
+        </div>
+    }
+</div>
+
+

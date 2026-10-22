@@ -1,0 +1,105 @@
+﻿@model IEnumerable<Demo1.Models.Account>
+@{
+    ViewBag.Title = "Quản lý tài khoản khách hàng";
+    Layout = "~/Views/Shared/Admin.cshtml";
+}
+<link href="~/Content/BookStore/HomePage.css" rel="stylesheet" />
+<link rel="stylesheet" href="~/Content//bootstrap.min.css" />
+<link href="~/Content/BookStore/SOFM.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link href="~/Content/BookStore/AdminStyle.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@600;700;800;900&display=swap" rel="stylesheet">
+
+<div class="admin-confirm-wrapper">
+    <div class="admin-confirm-box-2">
+        <h2>Quản lý tài khoản khách hàng</h2>
+        <div class="search-center">
+            @using (Html.BeginForm("AccountList", "Admin", FormMethod.Get, new { @class = "admin-search" }))
+            {
+                <input type="text" name="keyword" value="@ViewBag.Keyword" placeholder="Tìm theo username, tên, email..." />
+                <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+            }
+        </div>
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Họ tên</th>
+                    <th>Email</th>
+                    <th>Trạng thái</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var a in Model)
+                {
+                    <tr>
+                        <td>@a.AccountID</td>
+                        <td>@a.Username</td>
+                        <td>@(a.Customer != null ? a.Customer.FullName : "")</td>
+                        <td>@(a.Customer != null ? a.Customer.Email : "")</td>
+                        <td>
+                            @if (a.Status == true)
+                            {
+                                <span class="admin-badge admin-badge-active">Hoạt động</span>
+                            }
+                            else
+                            {
+                                <span class="admin-badge admin-badge-inactive">Đã khoá</span>
+                            }
+                        </td>
+                        <td class="admin-row-actions">
+                            <ol id="fm-menu" class="fm-menu">
+                                <li class="item-menu-2">
+                                    @Html.ActionLink("Xoá", "AccountDelete", new { id = a.AccountID }, new { @class = "btn-admin-edit" })
+                                </li>
+                            </ol>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+@if (!Model.Any())
+{
+    <div class="admin-empty">Không tìm thấy tài khoản nào.</div>
+}
+@if (TempData["Success5"] != null)
+{
+    <script>
+     window.onload = function () {
+         Swal.fire({
+             icon: 'success',
+             title: "Delete Thành công",
+             text: '@TempData["Success5"]',
+             confirmButtonClick: 'OK',
+             allowOutsideClick: false
+         }).then((result) => {
+             if (result.isConfirmed) {
+                 window.location.hred = '@Url.Action("AccountList","Admin")';
+             }
+         })
+     }
+    </script>
+}
+@if (TempData["Success3"] != null)
+{
+    <script>
+     window.onload = function () {
+         Swal.fire({
+             icon: 'success',
+             title: "Login Thành Công",
+             text: '@TempData["Success3"]',
+             confirmButtonClick: 'OK',
+             allowOutsideText: false
+         }).then((result) => {
+             if (result.isConfirmed) {
+                 window.location.href = '@Url.Action("AccountList","Admin")';
+             }
+         })
+     }
+    </script>
+}
+

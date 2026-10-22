@@ -1,0 +1,127 @@
+﻿@model IEnumerable<Demo1.Models.Book>
+@{
+    ViewBag.Title = "BS Book Store";
+    Layout = "~/Views/Shared/Mainlayout.cshtml";
+}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link href="~/Content/BookStore/HomePage.css" rel="stylesheet" />
+<link rel="stylesheet" href="~/Content//bootstrap.min.css" />
+<link href="~/Content/BookStore/AdminStyle.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@600;700;800;900&display=swap" rel="stylesheet">
+<div class="bs-hero">
+    <span class="bs-tag">Beyond Stories · BookStore</span>
+    <h2>Bước vào thế giới của những trang sách</h2>
+    <p>Khám phá kho sách trinh thám, thiếu nhi, kinh dị và nhiều thể loại khác — cập nhật mỗi ngày.</p>
+</div>
+
+<div class="bs-section-title">Sách mới nhất</div>
+
+@if (Model != null && Model.Any())
+{
+    <div class="bs-grid">
+        @foreach (var book in Model)
+        {
+            <div class="bs-card" onclick="window.location.href='@Url.Action("BookDetail", "HomePage", new { id = book.BookID })'"
+ style="cursor:pointer;">
+           
+                <div class="bs-card-img">
+                    @if (book.Quantity <= 0)
+                    {
+                        <span class="bs-badge-sold">Hết hàng</span>
+                    }
+                    <img src="@Url.Content(string.IsNullOrEmpty(book.Image) ? "~/image/no-image.jpg" : book.Image)"
+                         alt="@book.BookName" />
+                </div>
+                <div class="bs-card-body">
+                    <h3>@book.BookName</h3>
+                    <p class="bs-card-author">@(book.Author != null ? book.Author.AuthorName : "Đang cập nhật")</p>
+                    <div class="bs-card-price">@book.Price.ToString("N0") đ</div>
+                </div>
+
+                <div class="bs-card-actions" onclick="event.stopPropagation();">
+
+                    @if (book.Quantity > 0)
+                    {
+                        @Html.ActionLink("Mua ngay", "BuyNow", "Order", new { bookId = book.BookID }, new { @class = "btn-admin-primary btn-add-book" })
+                        <button type="button" class="btn-add-cart" onclick="addToCart(@book.BookID)">
+                            <i class="fa-solid fa-cart-plus"></i>
+                        </button>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn-buy-now" disabled>Hết hàng</button>
+                    }
+
+                </div>
+
+            </div>
+                }
+            </div>
+}
+else
+{
+    <div class="bs-empty">Chưa có sách nào để hiển thị.</div>
+}
+@if (TempData["Success3"] != null)
+{
+    <script>
+     window.onload = function () {
+         Swal.fire({
+             icon: 'success',
+             title: "Login Thành Công",
+             text: '@TempData["Success3"]',
+             confirmButtonClick: 'OK',
+             allowOutsideText: false
+         }).then((result) => {
+             if (result.isConfirmed) {
+                 window.location.href = '@Url.Action("BS","HomePage")';
+             }
+         })
+     }
+    </script>
+}
+@if (TempData["Success4"] != null)
+{
+    <script>
+   window.onload = function () {
+       Swal.fire({
+           icon: 'success',
+           title: "Edit Thành công",
+           text: '@TempData["Success4"]',
+           confirmButtonClick: 'OK',
+           allowOutsideClick: false
+       }).then((result) => {
+           if (result.isConfirmed) {
+               window.location.href = '@Url.Action("BS", "HomePage")';
+           }
+       })
+    }
+    </script>
+}
+<script>
+    function addToCart(bookId) {
+        fetch('@Url.Action("AddToCart", "Order")', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: 'bookId=' + bookId + '&quantity=1'
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) {
+                Swal.fire({ icon: 'success', title: 'Đã thêm vào giỏ hàng', timer: 1200, showConfirmButton: false });
+            } else {
+                Swal.fire({
+                    icon: data.needLogin ? 'warning' : 'error',
+                    title: data.needLogin ? 'Vui lòng đăng nhập' : 'Có lỗi xảy ra',
+                    text: data.message,
+                    confirmButtonText: 'OK'
+                }).then(res => {
+                    if (data.needLogin && res.isConfirmed) {
+                        window.location.href = '@Url.Action("Login", "Login")';
+                    }
+                });
+            }
+        });
+    }
+</script>
+

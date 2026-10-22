@@ -1,0 +1,122 @@
+﻿@model IEnumerable<Demo1.Models.Cart>
+@{
+    ViewBag.Title = "Giỏ hàng";
+    Layout = "~/Views/Shared/Mainlayout.cshtml";
+}
+<link href="~/Content/BookStore/HomePage.css" rel="stylesheet" />
+<link href="~/Content/BookStore/AdminStyle.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="~/Content//bootstrap.min.css" />
+<div class="admin-page-wrap">
+    <div class="admin-confirm-box-2">
+
+        <h2>GIỎ HÀNG CỦA BẠN</h2>
+
+        @if (Model != null && Model.Any())
+        {
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Ảnh</th>
+                        <th>Tên sách</th>
+                        <th>Đơn giá</th>
+                        <th>Số lượng</th>
+                        <th>Thành tiền</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <img src="@Url.Content(string.IsNullOrEmpty(item.Book.Image) ? "~/image/no-image.jpg" : item.Book.Image)"
+                                     width="70"
+                                     height="90"
+                                     style="object-fit:cover;border-radius:6px;" />
+                            </td>
+
+                            <td>@item.Book.BookName</td>
+
+                            <td>
+                                @item.Book.Price.ToString("N0") đ
+                            </td>
+
+                            <td>
+                                @using (Html.BeginForm("UpdateQuantity", "Order", FormMethod.Post))
+                                {
+                                    @Html.AntiForgeryToken()
+
+                                    <input type="hidden"
+                                           name="cartId"
+                                           value="@item.CartID" />
+
+                                    <input type="number"
+                                           name="quantity"
+                                           value="@item.Quantity"
+                                           min="1"
+                                           style="width:70px;text-align:center"
+                                           onchange="this.form.submit()" />
+                                }
+                            </td>
+
+                            <td>
+                                @((item.Book.Price * (item.Quantity ?? 0)).ToString("N0")) đ
+                            </td>
+
+                            <td>
+                                @using (Html.BeginForm("RemoveFromCart", "Order", FormMethod.Post))
+                                {
+                                    @Html.AntiForgeryToken()
+
+                                    <input type="hidden"
+                                           name="cartId"
+                                           value="@item.CartID" />
+
+                                    <button type="submit"
+                                            class="btn btn-danger btn-sm">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div style="margin-top:20px;display:flex;justify-content:center;align-items:center;">
+                <h4 style="margin:0;">
+                    Tổng cộng:
+                    <span style="color:#1e6fea;font-weight:bold">
+                        @(Model.Sum(x => x.Book.Price * (x.Quantity ?? 0)).ToString("N0")) đ
+                    </span>
+                </h4>
+            </div>
+            <div style="margin-top:25px;text-align:right">
+
+
+                <div class="admin-form-actions">
+                    <ol id="fm-menu" class="fm-menu">
+                        <li>
+                            @Html.ActionLink(
+                                "Thanh toán",
+                                "Checkout",
+                                "Order",
+                                null,
+                                new { @class = "btn-admin-primary" }
+                            )
+                        </li>
+                    </ol>
+                </div>
+
+            </div>
+        }
+        else
+        {
+            <div class="bs-empty">
+                Giỏ hàng của bạn đang trống.
+            </div>
+        }
+
+    </div>
+</div>

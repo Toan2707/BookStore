@@ -1,0 +1,35 @@
+﻿@model Demo1.Models.Book
+
+@{
+    ViewBag.Title = "BookDelete";
+    Layout = "~/Views/Shared/Admin.cshtml";
+}
+
+<link href="~/Content/BookStore/AdminStyle.css" rel="stylesheet" />
+<link href="~/Content/BookStore/HomePage.css" rel="stylesheet" />
+<link href="~/Content/BookStore/SOFM.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<div class="admin-confirm-wrapper">
+    <div class="admin-confirm-box">
+        <h2>Book Delete</h2>
+        <p>Bạn có chắc muốn xóa sách này <strong>@Model.BookName</strong>?</p>
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.BookID)
+            <div class="bs-hero-2">
+                <span class="bs-tag">Beyond Stories · BookStore</span>
+                <img src="~/image/delete.png" style="width:80%" height="250" />
+            </div>
+            <div class="admin-form-actions">
+
+                <ol id="fm-menu" class="fm-menu">
+                    <li class="item-menu">
+                        @Html.ActionLink("Huỷ", "BookList", null, new { @class = "btn-admin-ghost" })
+                    </li>
+                    <li><button type="submit" class="btn-admin-delete">Xác nhận xoá</button></li>
+                </ol>
+            </div>
+        }
+    </div>
+    </div>

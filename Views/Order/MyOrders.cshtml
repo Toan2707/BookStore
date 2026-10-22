@@ -1,0 +1,49 @@
+﻿@model IEnumerable<Demo1.Models.Order>
+@{
+    ViewBag.Title = "Đơn hàng của tôi";
+    Layout = "~/Views/Shared/Mainlayout.cshtml";
+}
+<link href="~/Content/BookStore/AdminStyle.css" rel="stylesheet" />
+<link href="~/Content/BookStore/HomePage.css" rel="stylesheet" />
+<link rel="stylesheet" href="~/Content//bootstrap.min.css" />
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@600;700;800;900&display=swap" rel="stylesheet">
+<link href="~/Content/BookStore/SOFM.css" rel="stylesheet" />
+<div class="admin-page-wrap">
+    <div class="admin-form">
+        <div class="admin-form-header">
+            <h2>Đơn hàng của tôi</h2>
+
+           
+
+            @if (Model != null && Model.Any())
+            {
+                <div class="order-list"style="display:flex;flex-direction:column;align-items:center;justify-content:center">
+                    @foreach (var o in Model)
+                    {
+                        string cls = o.Status == "Đang giao" ? "shipping" : (o.Status == "Đã giao" ? "done" : "pending");
+                        <div class="order-card">
+                            <div class="order-card-head">
+                                <span>Đơn hàng #@o.OrderID</span>
+                                <span class="order-status order-status-@cls">@o.Status</span>
+                            </div>
+                            <div class="order-card-body">
+                                <div>Ngày đặt: @o.OrderDate.Value.ToString("dd/MM/yyyy HH:mm")</div>
+                                <div>Tổng tiền: <strong>@o.TotalMoney.Value.ToString("N0") đ</strong></div>
+                                <div>Địa chỉ: @o.ShippingAddress</div>
+                            </div>
+                            <ol id="fm-menu" class="fm-menu">
+                                <li class="item-menu">
+                                    @Html.ActionLink("Xem chi tiết", "OrderDetails", new { id = o.OrderID }, new { @class = "btn-admin-ghost" })
+</li>
+                                </ol>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="bs-empty">Bạn chưa có đơn hàng nào.</div>
+            }
+        </div>
+    </div>
+</div>

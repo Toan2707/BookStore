@@ -1,0 +1,146 @@
+﻿@model Demo1.Models.Book
+
+@{
+    ViewBag.Title = "Sửa sách";
+    Layout = "~/Views/Shared/Admin.cshtml";
+}
+
+<link href="~/Content/BookStore/AdminStyle.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@600;700;800;900&display=swap" rel="stylesheet">
+
+<div class="admin-page-wrap">
+    <div class="admin-form">
+
+        <div class="admin-form-header">
+            <h2>Sửa sách</h2>
+            <br />
+            <p style="text-align:center;font-weight:bold">
+                Cập nhật thông tin sách trong kho — BS
+            </p>
+        </div>
+
+        <div class="admin-form-body">
+
+            @using (Html.BeginForm("BookEdit", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+
+                @Html.HiddenFor(m => m.BookID)
+
+                <div class="admin-field">
+                    <label>Tên sách</label>
+                    @Html.TextBoxFor(m => m.BookName, new { @class = "form-control" })
+                </div>
+
+                <div class="admin-field">
+                    <label>Tác giả</label>
+                    @Html.DropDownList("AuthorID",
+                        (SelectList)ViewBag.Authors,
+                        "-- Chọn tác giả --",
+                        new { @class = "form-control" })
+                </div>
+
+                <div class="admin-field">
+                    <label>Thể loại</label>
+                    @Html.DropDownList("CategoryID",
+                        (SelectList)ViewBag.Categories,
+                        "-- Chọn thể loại --",
+                        new { @class = "form-control" })
+                </div>
+
+                <div class="admin-field">
+                    <label>Nhà xuất bản</label>
+                    @Html.DropDownList("PublisherID",
+                        (SelectList)ViewBag.Publishers,
+                        "-- Chọn nhà xuất bản --",
+                        new { @class = "form-control" })
+                </div>
+
+                <div class="admin-field">
+                    <label>Giá</label>
+                    @Html.TextBoxFor(m => m.Price,
+                        new
+                        {
+                            @class = "form-control",
+                            type = "number",
+                            step = "1000"
+                        })
+                </div>
+
+                <div class="admin-field">
+                    <label>Số lượng tồn kho</label>
+                    @Html.TextBoxFor(m => m.Quantity,
+                        new
+                        {
+                            @class = "form-control",
+                            type = "number"
+                        })
+                </div>
+
+                <div class="admin-field">
+                    <label>Năm xuất bản</label>
+                    @Html.TextBoxFor(m => m.PublishYear,
+                        new
+                        {
+                            @class = "form-control",
+                            type = "number"
+                        })
+                </div>
+
+                <div class="admin-field">
+                    <label>Mô tả</label>
+                    @Html.TextAreaFor(m => m.Description,
+                        new
+                        {
+                            @class = "form-control",
+                            rows = 4
+                        })
+                </div>
+
+                <div class="admin-field">
+                    <label>Ảnh hiện tại</label><br />
+
+                    @if (!string.IsNullOrEmpty(Model.Image))
+                    {
+                        <img src="@Url.Content(Model.Image)"
+                             style="width:120px;border-radius:10px;margin-bottom:10px;" />
+                    }
+                </div>
+
+                <div class="admin-field">
+                    <label>Đổi ảnh bìa</label>
+                    <input type="file"
+                           name="ImageFile"
+                           class="form-control"
+                           accept="image/*" />
+                </div>
+
+                <div class="admin-field">
+                    <label>Trạng thái</label>
+
+                    @Html.DropDownListFor(m => m.Status,
+                        new List<SelectListItem>
+                        {
+                            new SelectListItem{ Text="Đang bán", Value="true"},
+                            new SelectListItem{ Text="Ẩn", Value="false"}
+                        },
+                        new { @class = "form-control" })
+                </div>
+
+                <div class="admin-form-actions">
+                    <button type="submit" class="btn-admin-primary">
+                        Lưu thay đổi
+                    </button>
+
+                    @Html.ActionLink("Quay lại",
+                                     "BookList",
+                                     null,
+                                     new { @class = "btn-admin-primary" })
+                </div>
+
+            }
+
+        </div>
+
+    </div>
+</div>

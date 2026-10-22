@@ -1,0 +1,63 @@
+﻿@model Demo1.Models.CheckoutViewModel
+@{
+    ViewBag.Title = "Mua hàng";
+    Layout = "~/Views/Shared/Mainlayout.cshtml";
+}
+<link href="~/Content/BookStore/HomePage.css" rel="stylesheet" />
+<link href="~/Content/BookStore/AdminStyle.css" rel="stylesheet" />
+<link href="~/Content/BookStore/SOFM.css" rel="stylesheet" />
+<link rel="stylesheet" href="~/Content//bootstrap.min.css" />
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@600;700;800;900&display=swap" rel="stylesheet">
+<div class="checkout-wrap">
+    <div class="admin-form-header">
+        <h2>Thông tin đặt hàng</h2>
+
+        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;">
+            <img src="@Url.Content(string.IsNullOrEmpty(ViewBag.Book.Image) ? "~/image/no-image.jpg" : ViewBag.Book.Image)" style="height:200px;width:150px" />
+            <div>
+                <h4>@ViewBag.Book.BookName</h4>
+                <div  style="font-size:28px;font-weight:bold;color:#1e6fea;">@(((decimal)ViewBag.Book.Price).ToString("N0")) đ</div>
+            </div>
+        </div>
+
+        @if (ViewBag.Err != null)
+        {
+            <div class="admin-alert admin-alert-error">@ViewBag.Err</div>
+        }
+
+        @using (Html.BeginForm("BuyNow", "Order", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.BookID)
+
+            <div class="admin-field">
+                <label style="color:white">Số lượng</label>
+                @Html.TextBoxFor(m => m.Quantity, new { @class = "form-control", type = "number", min = "1" })
+            </div>
+            <div class="admin-field">
+                <label style="color:white">Họ tên người nhận</label>
+                @Html.TextBoxFor(m => m.FullName, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.FullName, "", new { @class = "admin-err" })
+            </div>
+            <div class="admin-field">
+                <label style="color:white">Số điện thoại</label>
+                @Html.TextBoxFor(m => m.Phone, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Phone, "", new { @class = "admin-err" })
+            </div>
+            <div class="admin-field">
+                <label style="color:white">Địa chỉ nhận hàng</label>
+                @Html.TextBoxFor(m => m.Address, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Address, "", new { @class = "admin-err" })
+            </div>
+            <div class="admin-field">
+                <label style="color:white">Phương thức thanh toán</label>
+                @Html.TextBoxFor(m => m.PaymentMethod, new { @class = "form-control", @readonly = "readonly" })
+            </div>
+
+            <div class="admin-form-actions">
+                <button type="submit" class="btn-admin-primary">Đặt hàng</button>
+                @Html.ActionLink("Huỷ", "BS", "HomePage", null, new { @class = "btn-admin-primary-2" })
+            </div>
+        }
+    </div>
+</div>

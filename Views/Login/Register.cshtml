@@ -1,0 +1,123 @@
+﻿@model Demo1.Models.RegisterViewModel
+
+@{
+    ViewBag.Title = "Register";
+    Layout = "~/Views/Shared/Login.cshtml";
+}
+<link href="~/Content/BookStore/HomePage.css" rel="stylesheet" />
+<link rel="stylesheet" href="~/Content//bootstrap.min.css" />
+<link href="~/Content/BookStore/SOFM.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link href="~/Content/BookStore/AdminStyle.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@600;700;800;900&display=swap" rel="stylesheet">
+<div class="admin-confirm-wrapper">
+    <div class="admin-confirm-box-2">
+        <h2>Register</h2>
+        @using (Html.BeginForm("Register", "Login", FormMethod.Post,
+            new { enctype = "multipart/form-data"  }))
+        {
+            <table class="table">
+                <tr>
+                    <th>User Name:</th>
+                    <td>
+                        @Html.TextBoxFor(m => m.Username)
+                        @if (ViewBag.ErrUser != null)
+                        {
+                            <span class="text-danger">@ViewBag.ErrUser</span>
+                        }
+                    </td>
+
+                    <td>@Html.ValidationMessageFor(m => m.Username)</td>
+                </tr>
+                <tr>
+                    <th>Password:</th>
+                    <td>@Html.TextBoxFor(m => m.Password)</td>
+                    <td>@Html.ValidationMessageFor(m => m.Password)</td>
+                </tr>
+                <tr>
+                    <th>Repeat Password:</th>
+                    <td>@Html.TextBoxFor(m => m.ConfirmPassword)</td>
+                    <td>@Html.ValidationMessageFor(m => m.ConfirmPassword)</td>
+                </tr>
+
+                <tr>
+                    <th>Full Name</th>
+                    <td>@Html.TextBoxFor(m => m.FullName)</td>
+                </tr>
+
+                <tr>
+                    <th>Gender</th>
+                    <td>
+                        @Html.DropDownListFor(m => m.Gender, new List<SelectListItem>
+                {
+                    new SelectListItem { Text = "Nam", Value = "Nam" },
+                    new SelectListItem { Text = "Nữ", Value = "Nữ" },
+                    new SelectListItem { Text = "Khác", Value = "Khác" }
+                }, "-- Chọn giới tính --", new { @class = "form-control" })
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Birthday</th>
+                    <td>@Html.TextBoxFor(m => m.Birthday, new { type = "date" })</td>
+                </tr>
+
+                <tr>
+                    <th>Phone</th>
+                    <td>@Html.TextBoxFor(m => m.Phone)</td>
+                </tr>
+
+                <tr>
+                    <th>Email</th>
+                    <td>@Html.TextBoxFor(m => m.Email)</td>
+                </tr>
+
+                <tr>
+                    <th>Address</th>
+                    <td>@Html.TextBoxFor(m => m.Address)</td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <img id="preview-image" src="@Url.Content(Model.Image)" style="width:220px;height:120px" />
+                    </td>
+                </tr>
+                <tr>
+                    <th>Image:</th>
+                    <td><input type="file" id="ImageFile" name="ImageFile" accept="image/*" class="form-control" /></td>
+                    <td>@Html.ValidationMessageFor(m => m.Username)</td>
+                </tr>
+                <tr>
+                    <td>
+                        <ol id="fm-menu" class="fm-menu">
+                            <li>
+                                <input type="submit" class="btn-admin-delete-2" value="Register" /></li>
+                            </ol>
+                    </td>
+                    <td>
+                        <ol id="fm-menu" class="fm-menu">
+                            <li>
+                                <input type="reset" class="btn-admin-delete-2" value="Clear" /></li>
+                            </ol>
+
+                    </td>
+
+                    <td>
+                        @Html.ActionLink("Login", "Login", "Login", new { @class = "btn btn-danger" })
+                    </td>
+                </tr>
+            </table>
+        }
+        <script>
+            document.getElementById("ImageFile").addEventListener("change", function (e) {
+                if (e.target.files.length > 0) {
+                    const reader = new FileReader();
+                    reader.onload = function () {
+                        document.getElementById("preview-image").src = reader.result;
+                    };
+                    reader.readAsDataURL(e.target.files[0]);
+                }
+            });
+        </script>
+    </div>
+</div>
+

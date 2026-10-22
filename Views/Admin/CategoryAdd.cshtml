@@ -1,0 +1,79 @@
+﻿@model Demo1.Models.Category
+
+@{
+    ViewBag.Title = "Thêm thể loại";
+    Layout = "~/Views/Shared/Admin.cshtml";
+}
+
+<link href="~/Content/BookStore/AdminStyle.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<div class="admin-page-wrap">
+    <div class="admin-form">
+
+        <div class="admin-form-header">
+            <h2>Thêm thể loại mới</h2>
+            <br />
+            <p style="text-align:center;font-weight:bold">
+                Điền thông tin thể loại để thêm vào hệ thống — BS
+            </p>
+        </div>
+
+        <div class="admin-form-body">
+
+            @using (Html.BeginForm("CategoryAdd", "Admin", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="admin-field">
+                    <label>Tên thể loại</label>
+
+                    @Html.TextBoxFor(m => m.CategoryName,
+                        new
+                        {
+                            @class = "form-control",
+                            placeholder = "Nhập tên thể loại..."
+                        })
+
+                    @Html.ValidationMessageFor(m => m.CategoryName, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="admin-form-actions">
+
+                    <button type="submit" class="btn-admin-primary">
+                        Thêm thể loại
+                    </button>
+
+                    @Html.ActionLink("BackToList",
+                                     "CategoryList",
+                                     null,
+                                     new { @class = "btn-admin-primary" })
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+</div>
+
+
+@if (TempData["Success10"] != null)
+{
+    <script>
+     window.onload = function () {
+         Swal.fire({
+             icon: 'success',
+             title: "Delete Thành công",
+             text: '@TempData["Success10"]',
+             confirmButtonClick: 'OK',
+             allowOutsideClick: false
+         }).then((result) => {
+             if (result.isConfirmed) {
+                 window.location.hred = '@Url.Action("BookList","Admin")';
+             }
+         })
+     }
+    </script>
+}

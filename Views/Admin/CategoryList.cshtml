@@ -1,0 +1,110 @@
+﻿@model IEnumerable<Demo1.Models.Category>
+
+@{
+    ViewBag.Title = "CategoryList";
+    Layout = "~/Views/Shared/Admin.cshtml";
+}
+<link href="~/Content/BookStore/HomePage.css" rel="stylesheet" />
+<link rel="stylesheet" href="~/Content//bootstrap.min.css" />
+<link href="~/Content/BookStore/SOFM.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link href="~/Content/BookStore/AdminStyle.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@600;700;800;900&display=swap" rel="stylesheet">
+<div class="admin-confirm-wrapper">
+    <div class="admin-confirm-box-2">
+        <h2>DANH SÁCH THỂ LOẠI</h2>
+        <div class="search-center">
+
+            @using (Html.BeginForm("CategoryList", "Admin", FormMethod.Get,
+                    new { @class = "admin-search" }))
+            {
+                <input type="text"
+                       name="keyword"
+                       value="@ViewBag.Keyword"
+                       placeholder="Tìm tên thể loại..." />
+
+                <button type="submit">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            }
+
+            @Html.ActionLink("Thêm thể loại",
+                             "CategoryAdd",
+                             null,
+                             new { @class = "btn-admin-primary" })
+        </div>
+
+        <table class="admin-table">
+
+            <thead>
+
+                <tr>
+                    <th>ID</th>
+                    <th>Tên thể loại</th>
+                    <th>Số sách</th>
+                    <th></th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                @foreach (var c in Model)
+                {
+                    <tr>
+
+                        <td>@c.CategoryID</td>
+
+                        <td>@c.CategoryName</td>
+
+                        <td>@c.Books.Count</td>
+
+                        <td>
+
+                            <ol class="fm-menu-2">
+
+                                <li class="item-menu">
+                                    @Html.ActionLink("Chi tiết",
+                                                     "CategoryDetail",
+                                                     new { id = c.CategoryID },
+                                                     new { @class = "btn-admin-edit" })
+                                </li>
+
+                                <li>
+                                    @using (Html.BeginForm("CategoryDelete", "Admin",
+                                        FormMethod.Post,
+                                        new { style = "display:inline;", onsubmit = "return confirm('Bạn có chắc muốn xóa thể loại này?');" }))
+                                    {
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@c.CategoryID" />
+
+                                        <button type="submit" class="btn-admin-delete">
+                                            Xóa
+                                        </button>
+                                    }
+                                </li>
+
+                            </ol>
+
+                        </td>
+
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+</div>
+@if (TempData["Error2"] != null)
+{
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Lỗi',
+            text: '@TempData["Error2"]'
+        });
+    </script>
+}

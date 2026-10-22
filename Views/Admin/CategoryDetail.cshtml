@@ -1,0 +1,69 @@
+﻿@model IEnumerable<Demo1.Models.Book>
+
+@{
+    ViewBag.Title = "CategoryDetail";
+    Layout = "~/Views/Shared/Admin.cshtml";
+}
+<link href="~/Content/BookStore/HomePage.css" rel="stylesheet" />
+<link rel="stylesheet" href="~/Content//bootstrap.min.css" />
+<link href="~/Content/BookStore/SOFM.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link href="~/Content/BookStore/AdminStyle.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@600;700;800;900&display=swap" rel="stylesheet">
+<div class="admin-confirm-wrapper">
+    <div class="admin-confirm-box-2">
+        <h2>Sách thuộc thể loại: @ViewBag.Category.CategoryName</h2>
+        <table class="admin-table">
+
+            <thead>
+
+                <tr>
+                    <th>ID</th>
+                    <th>Ảnh</th>
+                    <th>Tên sách</th>
+                    <th>Tác giả</th>
+                    <th>Giá</th>
+                    <th>Tồn kho</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                @foreach (var b in Model)
+                {
+                    <tr>
+
+                        <td>@b.BookID</td>
+
+                        <td>
+                            <img src="@Url.Content(string.IsNullOrEmpty(b.Image)
+?"~/image/no-image.jpg":b.Image)"
+                                 width="45"
+                                 height="60" />
+                        </td>
+
+                        <td>@b.BookName</td>
+
+                        <td>@b.Author.AuthorName</td>
+
+                        <td>@b.Price.ToString("N0") đ</td>
+
+                        <td>@b.Quantity</td>
+
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+        <br />
+
+        @Html.ActionLink("Quay lại",
+                         "CategoryList",
+                         null,
+                         new { @class = "btn-admin-primary" })
+        </div>
+    </div>
+

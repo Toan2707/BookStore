@@ -1,0 +1,64 @@
+﻿@model Demo1.Models.Order
+@{
+    ViewBag.Title = "Chi tiết đơn hàng";
+    Layout = "~/Views/Shared/Mainlayout.cshtml";
+    string[] steps = { "Chờ xác nhận", "Đang giao", "Đã giao" };
+    int currentStep = Array.IndexOf(steps, Model.Status);
+    if (currentStep < 0)
+    {
+        currentStep = 0;
+    }
+}
+<link href="~/Content/BookStore/AdminStyle.css" rel="stylesheet" />
+<link href="~/Content/BookStore/HomePage.css" rel="stylesheet" />
+<link href="~/Content/BookStore/SOFM.css" rel="stylesheet" />
+<link rel="stylesheet" href="~/Content//bootstrap.min.css" />
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@600;700;800;900&display=swap" rel="stylesheet">
+<div class="admin-page-wrap">
+    <div class="admin-form">
+        <div class="admin-form-header">
+            <h2>Đơn hàng #@Model.OrderID</h2>
+
+            <div class="order-tracker">
+                @for (int i = 0; i < steps.Length; i++)
+                {
+                    <div class="order-step @(i <= currentStep ? "active" : "")">
+                        <div class="order-step-dot">@(i + 1)</div>
+                        <div class="order-step-label">@steps[i]</div>
+                    </div>
+                    if (i < steps.Length - 1)
+                    {
+                        <div class="order-step-line @(i < currentStep ? "active" : "")"></div>
+                    }
+                }
+            </div>
+
+            <div>
+                <p>Ngày đặt: @Model.OrderDate.Value.ToString("dd/MM/yyyy HH:mm")</p>
+                <p>Địa chỉ nhận hàng: @Model.ShippingAddress</p>
+                <p>Tổng tiền: <strong>@Model.TotalMoney.Value.ToString("N0") đ</strong></p>
+                <p style="font-weight:bold">Lưu ý: Nếu bạn cần hủy đơn hàng (KHI ĐƠN HÀNG CHƯA ĐANG GIAO) hãy liên hệ qua số ĐT : 0902 XXX XXX</p>
+            </div>
+
+            <table class="checkout-table">
+                <thead>
+                    <tr><th>Sách</th><th>Số lượng</th><th>Giá</th><th>Thành tiền</th></tr>
+                </thead>
+                <tbody>
+                    @foreach (var d in (IEnumerable<Demo1.Models.OrderDetail>)ViewBag.Details)
+                    {
+                        <tr>
+                            <td>@d.Book.BookName</td>
+                            <td>@d.Quantity</td>
+                            <td>@(d.Price.HasValue ? d.Price.Value.ToString("N0") : "0")  đ</td>
+                            <td>@(((d.Price ?? 0) * (d.Quantity ?? 0)).ToString("N0")) đ</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div class="admin-form-actions">
+                @Html.ActionLink("Quay lại", "MyOrders", "Order", null, new { @class = "btn-admin-primary" })
+                </div>
+            </div>
+        </div>
+</div>

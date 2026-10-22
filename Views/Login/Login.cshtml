@@ -1,0 +1,79 @@
+﻿@model Demo1.Models.LoginViewModel
+
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/Login.cshtml";
+}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link rel="stylesheet" href="~/Content//bootstrap.min.css" />
+<link href="~/Content/BookStore/AdminStyle.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@600;700;800;900&display=swap" rel="stylesheet">
+<div class="admin-confirm-wrapper">
+    <div class="admin-confirm-box-2">
+        <h2>Login Form</h2>
+        @using (Html.BeginForm())
+        {
+            <table class="table">
+                <tr>
+                    <th>
+                        User Name:
+                    </th>
+                    <td>@Html.TextBoxFor(m => m.Username)</td>
+                    <td>@Html.ValidationMessageFor(m => m.Username)</td>
+                </tr>
+                <tr>
+                    <th>Password:</th>
+                    <td>@Html.TextBoxFor(m => m.Password)</td>
+                    <td>@Html.ValidationMessageFor(m => m.Password)</td>
+                </tr>
+
+                <tr>
+                    <td>
+                        @Html.ActionLink("Register", "Register", "", new { @class = "btn btn-success" })
+
+                    </td>
+                    <td>
+                        <input type="submit" value="Login" class="item-menu" />
+                    </td>
+                    <td style="color:red;font-style:italic">@ViewBag.Err</td>
+                </tr>
+            </table>
+        }
+    </div>
+</div>
+@if (TempData["Success"] != null)
+{
+    <script>
+     window.onload = function () {
+         Swal.fire({
+             icon: 'success',
+             title: "Logout Thành Công",
+             text: '@TempData["Success"]',
+             confirmButtonClick: 'OK',
+             allowOutsideText: false
+         }).then((result) => {
+             if (result.isConfirmed) {
+                 window.location.href = '@Url.Action("Login","Login")';
+             }
+         })
+     }
+    </script>
+}
+@if (TempData["Success2"] != null)
+{
+    <script>
+     window.onload = function () {
+         Swal.fire({
+             icon: 'success',
+             title: " Đăng Ký Thành Công",
+             text: '@TempData["Success2"]',
+             confirmButtonClick: 'OK',
+             allowOutsideText: false
+         }).then((result) => {
+             if (result.isConfirmed) {
+                 window.location.href = '@Url.Action("Login","Login")';
+             }
+         })
+     }
+    </script>
+}

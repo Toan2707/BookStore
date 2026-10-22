@@ -1,0 +1,63 @@
+﻿@model Demo1.Models.Book
+@{
+    ViewBag.Title = "Thêm sách";
+    Layout = "~/Views/Shared/Admin.cshtml";
+}
+<link href="~/Content/BookStore/AdminStyle.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@600;700;800;900&display=swap" rel="stylesheet">
+<div class="admin-page-wrap">
+    <div class="admin-form">
+        <div class="admin-form-header">
+            <h2 >Thêm sách mới</h2>
+            <br />
+            <p style="text-align:center;font-weight:bold">Điền thông tin sách để thêm vào kho — BS</p>
+        </div>
+        <div class="admin-form-body">
+            @using (Html.BeginForm("BookADD", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="admin-field">
+                    <label>Tên sách</label>
+                    @Html.TextBoxFor(m => m.BookName, new { @class = "form-control" })
+                </div>
+                <div class="admin-field">
+                    <label>Tác giả</label>
+                    @Html.DropDownList("AuthorID", (SelectList)ViewBag.Authors, "-- Chọn tác giả --", new { @class = "form-control" })
+                </div>
+                <div class="admin-field">
+                    <label>Thể loại</label>
+                    @Html.DropDownList("CategoryID", (SelectList)ViewBag.Categories, "-- Chọn thể loại --", new { @class = "form-control" })
+                </div>
+                <div class="admin-field">
+                    <label>Nhà xuất bản</label>
+                    @Html.DropDownList("PublisherID", (SelectList)ViewBag.Publishers, "-- Chọn nhà xuất bản --", new { @class = "form-control" })
+                </div>
+                <div class="admin-field">
+                    <label>Giá</label>
+                    @Html.TextBoxFor(m => m.Price, new { @class = "form-control", type = "number", step = "1000" })
+                </div>
+                <div class="admin-field">
+                    <label>Số lượng tồn kho</label>
+                    @Html.TextBoxFor(m => m.Quantity, new { @class = "form-control", type = "number" })
+                </div>
+                <div class="admin-field">
+                    <label>Năm xuất bản</label>
+                    @Html.TextBoxFor(m => m.PublishYear, new { @class = "form-control", type = "number" })
+                </div>
+                <div class="admin-field">
+                    <label>Mô tả</label>
+                    @Html.TextAreaFor(m => m.Description, new { @class = "form-control", rows = 4 })
+                </div>
+                <div class="admin-field">
+                    <label>Ảnh bìa</label>
+                    <input type="file" name="ImageFile" accept="image/*" />
+                </div>
+
+                <div class="admin-form-actions">
+                    <button type="submit" class="btn-admin-primary">Lưu sách</button>
+                    @Html.ActionLink("BackToList", "BookList", null, new { @class = "btn-admin-primary" })
+                </div>
+            }
+        </div>
+    </div>
+</div>

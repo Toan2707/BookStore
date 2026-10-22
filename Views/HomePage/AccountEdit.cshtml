@@ -1,0 +1,80 @@
+﻿@model Demo1.Models.AccountEditViewModel
+@{
+    ViewBag.Title = "Sửa tài khoản khách hàng";
+    Layout = "~/Views/Shared/Mainlayout.cshtml";
+}
+<link rel="stylesheet" href="~/Content//bootstrap.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@600;700;800;900&display=swap" rel="stylesheet">
+<link href="~/Content/BookStore/AdminStyle.css" rel="stylesheet" />
+
+<div class="admin-page-wrap">
+    <div class="admin-form">
+        <div class="admin-form-header">
+            <h2>Sửa tài khoản</h2>
+        </div>
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.AccountID)
+            <div class="admin-form-body">
+                <div class="admin-field">
+                    <label>Tên đăng nhập</label>
+                    @Html.TextBoxFor(m => m.Username, new { @class = "form-control" })
+                    @if (ViewBag.ErrUser != null)
+                    {
+                        <span class="admin-err">@ViewBag.ErrUser</span>
+                    }
+                </div>
+                <div class="admin-field">
+                    <label>Mật khẩu mới (để trống nếu không đổi)</label>
+                    @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                </div>
+                <div class="admin-field">
+                    <label class="admin-checkbox-label">
+                        @Html.CheckBoxFor(m => m.Status) Tài khoản đang hoạt động
+                    </label>
+                </div>
+                <div class="admin-field">
+                    <label>Họ tên</label>
+                    @Html.TextBoxFor(m => m.FullName, new { @class = "form-control" })
+                </div>
+                <div class="admin-field">
+                    <label>Giới tính</label>
+                    @Html.DropDownListFor(m => m.Gender, new List<SelectListItem>
+                    {
+                        new SelectListItem { Text = "Nam", Value = "Nam" },
+                        new SelectListItem { Text = "Nữ", Value = "Nữ" },
+                        new SelectListItem { Text = "Khác", Value = "Khác" }
+                    }, "-- Chọn giới tính --", new { @class = "form-control" })
+                </div>
+                <div class="admin-field">
+                    <label>Ngày sinh</label>
+                    @Html.TextBoxFor(m => m.Birthday, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+                </div>
+                <div class="admin-field">
+                    <label>Điện thoại</label>
+                    @Html.TextBoxFor(m => m.Phone, new { @class = "form-control" })
+                </div>
+                <div class="admin-field">
+                    <label>Email</label>
+                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control", type = "email" })
+                    @if (ViewBag.ErrEmail != null)
+                    {
+                        <span class="admin-err">@ViewBag.ErrEmail</span>
+                    }
+                </div>
+                <div class="admin-field">
+                    <label>Địa chỉ</label>
+                    @Html.TextBoxFor(m => m.Address, new { @class = "form-control" })
+                </div>
+
+                <div class="admin-form-actions">
+                    <button type="submit" class="btn-admin-primary">Cập nhật</button>
+                    @Html.ActionLink("Huỷ", "BS", null, new { @class = "btn-admin-primary" })
+                </div>
+            </div>
+        }
+        </div>
+    </div>

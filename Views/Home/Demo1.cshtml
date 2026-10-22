@@ -1,0 +1,164 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta name="keywords" content="rau sạch" />
+    <meta name="description" content="CTTNHH GREENSHOP" />
+    <style>
+    .fm-menu {
+    padding: 10px;
+    background-color: mediumaquamarine;
+    border-radius: 10px;
+    }
+
+    nav a {
+    text-decoration: none;
+    color: black;
+    }
+
+    nav a:hover {
+    background-color: chartreuse;
+    color: black;
+    }
+
+    .fm-div{
+    background-color:green
+    }
+
+    .fm-img-content {
+    width: 100px;
+    height: 100px;
+    border-radius: 10px;
+    }
+    .fm-inline-block{
+    background-color:aqua;
+    margin:10px;
+    width:100px;
+    height:100px;
+    display:inline-block
+    }
+
+    .fm-content-item {
+    text-align: center;
+    }
+    <title>Practice Website</title>
+    </style>
+</head>
+<body>
+    <h1>My Practice Website</h1>
+    <h2>Introduction</h2>
+    <p>This is a <b>simple</b> website for <i>HTML practice</i></p>
+    <pre>Line 1 : Hello World</pre>
+    <pre>Line 2 : This text keeps its format</pre>
+    <br />
+    <a href="https://huflit.edu.vn/vi/" target="_blank">Trường Đại học ngoại ngữ - tin học TP.HCM</a>
+    <br />
+    <p> Water formula:H<sub>2</sub>O|Einstein:E=mc<sup>2</sup></p>
+    <p>T<sub>O</sub><sup>A</sup>N</p>
+    <img src="~/image/cute.jpg" alt="Cute" title="anime cute" />
+    <br />
+    <p>Old price:<del>$50</del> New price:<ins>$40</ins></p>
+    <p><abbr title="Rau má">Rau</abbr></p>
+    <br />
+    <h2>Lists</h2>
+    <ul typeof="square">
+        <li>Cute</li>
+        <li>Nah</li>
+        <li>Bruh</li>
+    </ul>
+    <p>2H<sub>2</sub>+O<sub>2</sub>=2H<sub>2</sub></p>
+    <p>T<sub>O</sub><sup>A</sup>N</p>
+    <video width="400" controls>
+        <source src="~/video/441542619_7728773203826809_2142923212685883377_n.mp4" type="video/mp4" />
+    </video>
+    <table border="1">
+        <tr>
+            <th>Name</th>
+            <th>Age</th>
+        </tr>
+        <tr>
+            <td>Toan</td>
+            <td>22</td>
+        </tr>
+    </table>
+
+    <br />
+    <table border="1">
+        <tr>
+            <th rowspan="3">INFO</th>
+        </tr>
+        <tr>
+            <td>Name</td>
+            <td>Age</td>
+        </tr>
+        <tr>
+           
+            <td>Toan</td>
+            <td>22</td>
+        </tr>
+    </table>
+    <br />
+    <table border="1">
+        <caption>Student Info</caption>
+        <tr>
+            <th>Name</th>
+            <th>Age</th>
+        </tr>
+        <tr>
+            <td>Toan</td>
+            <td>22</td>
+        </tr>
+    </table>
+    <br />
+    <form>
+        <fieldset>
+            <legend>Information</legend>
+            <label>Name</label>
+            <input name="text" placeholder="Enter Name" required /><br />
+            <label>Password</label>
+            <input type="email" placeholder="Enter your email" required />  <br />
+            <label>Email</label>
+            <input type="password" placeholder="Enter your Password" required /> <br />
+            Date
+            <input type="date" /> <br />
+            Comment<textarea name="message" rows="5" cols="30"></textarea>
+            <br />
+            <input type="file" Nofile chosen /> <br />
+            <label>Choose subject</label>
+
+           <select>
+                <option>Web CB</option>
+                <option>Web NC</option>
+                <option>LTMB</option>
+            </select>
+
+            /><br />
+            <select>
+                <option>Web CB</option>
+                <option>Web NC</option>
+                <option>LTMB</option>
+            </select>
+            Choose your address <select>
+                <optgroup label="HCM">
+                    <option>Q1</option>
+                    <option>Q2</option>
+                    <option>Q8</option>
+                </optgroup>
+                <optgroup label="HaNoi">
+                    <option>Hoan Kiem</option>
+                    <option>Dong Da</option>
+                    <option>Long Bien</option>
+                </optgroup>
+            </select>
+            <input type="submit" /> <input type="reset" />
+        </fieldset>
+       
+    </form>
+</body>
+</html>

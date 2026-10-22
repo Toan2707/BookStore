@@ -1,0 +1,185 @@
+﻿@model IEnumerable<Demo1.Models.Order>
+
+@{
+    ViewBag.Title = "Quản lý đơn hàng";
+    Layout = "~/Views/Shared/Admin.cshtml";
+}
+
+<link href="~/Content/BookStore/HomePage.css" rel="stylesheet" />
+<link rel="stylesheet" href="~/Content/bootstrap.min.css" />
+<link href="~/Content/BookStore/SOFM.css" rel="stylesheet" />
+<link href="~/Content/BookStore/AdminStyle.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@600;700;800;900&display=swap" rel="stylesheet">
+
+<div class="admin-confirm-wrapper">
+    <div class="admin-confirm-box-2">
+
+        <h2>Quản lý đơn hàng</h2>
+
+        <div class="search-center">
+            @using (Html.BeginForm("OrderList", "Admin", FormMethod.Get, new { @class = "admin-search" }))
+            {
+                <input type="text"
+                       name="keyword"
+                       value="@ViewBag.Keyword"
+                       placeholder="Tìm theo mã đơn hoặc tên khách hàng..." />
+
+                <button type="submit">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            }
+        </div>
+
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Mã đơn</th>
+                    <th>Khách hàng</th>
+                    <th>Ngày đặt</th>
+                    <th>Tổng tiền</th>
+                    <th>Trạng thái</th>
+                    <th width="260">Thao tác</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+
+                        <td>#@item.OrderID</td>
+
+                        <td>@item.Customer.FullName</td>
+
+                        <td>
+                            @(item.OrderDate.HasValue
+                                ? item.OrderDate.Value.ToString("dd/MM/yyyy HH:mm")
+                                : "")
+                        </td>
+
+                        <td>
+                            @((item.TotalMoney ?? 0).ToString("N0")) đ
+                        </td>
+
+                        <td>
+
+                            @if (item.Status == "Chờ xác nhận")
+                            {
+                                <span class="admin-badge admin-badge-warning">
+                                    Chờ xác nhận
+                                </span>
+                            }
+                            else if (item.Status == "Đang giao")
+                            {
+                                <span class="admin-badge admin-badge-active">
+                                    Đang giao
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="admin-badge admin-badge-success">
+                                    Đã giao
+                                </span>
+                            }
+
+                        </td>
+
+                        <td class="admin-row-actions">
+
+                            <ol class="fm-menu-2">
+
+                                @if (item.Status == "Chờ xác nhận")
+                                {
+                                    <li class="item-menu">
+                                        @Html.ActionLink("Xác nhận",
+                                                         "ConfirmOrder",
+                                                         new { id = item.OrderID },
+                                                         new { @class = "btn-admin-edit" })
+                                    </li>
+                                }
+                                <li class="item-menu-2">
+                                    @Html.ActionLink(
+                                        "Hủy",
+                                        "CancelOrder",
+                                        new { id = item.OrderID },
+                                        new
+                                        {
+                                            @class = "btn-admin-edit",
+                                            onclick = "return confirm('Bạn có chắc muốn hủy đơn hàng này?');"
+                                        })
+                                </li>
+
+                                @if (item.Status == "Đang giao")
+                                {
+                                    <li class="item-menu">
+                                        @Html.ActionLink("Đã giao",
+                                                         "DeliveredOrder",
+                                                         new { id = item.OrderID },
+                                                         new { @class = "btn-admin-edit" })
+                                    </li>
+                                }
+
+                            </ol>
+
+                        </td>
+
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="admin-empty">
+        Không có đơn hàng nào.
+    </div>
+}
+
+@if (TempData["Success7"] != null)
+{
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Thành công',
+            text: '@TempData["Success7"]',
+            confirmButtonText: 'OK'
+        });
+    </script>
+}
+@if (TempData["Success8"] != null)
+{
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Thành công',
+            text: '@TempData["Success8"]',
+            confirmButtonText: 'OK'
+        });
+    </script>
+}
+@if (TempData["Success9"] != null)
+{
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Thành công',
+            text: '@TempData["Success9"]'
+        });
+    </script>
+}
+@if (TempData["Error"] != null)
+{
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Lỗi',
+            text: '@TempData["Error"]'
+        });
+    </script>
+}

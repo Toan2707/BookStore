@@ -1,0 +1,76 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link href="~/Content/BookStore/SOFM.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/js/all.min.js"></script>
+
+</head>
+<body>
+    <div class="icon-show" onclick="toggleMenu()">
+        <i class="fa-solid fa-bars"> </i>
+    </div>
+    <nav>
+
+        <ol id="fm-menu" class="fm-menu">
+            <img class="logo" src="~/image/logoBS.png" />
+            <li class="item-menu">
+                @Html.ActionLink("Home", "BS", "HomePage")
+            </li>
+            <li class="item-menu">
+                @Html.ActionLink("Book", "Book", "HomePage")
+            </li>
+            <li class="item-menu">
+                @Html.ActionLink("About", "About", "HomePage")
+            </li>
+            <li class="item-menu">
+                @Html.ActionLink("Contact", "Contact", "HomePage")
+            </li>
+
+
+            <li>
+
+                @if (Session["UserName"] == null)
+                {
+                    @Html.ActionLink("Login", "Login", "Login", null, new { @class = "btn btn-danger" })
+                    <span class="fm-text">You do not login</span>
+                }
+                else
+                {
+                    <a href="@Url.Action("AccountEdit", "HomePage", new { id = Session["Account ID"] })" class="fm-avatar-link" title="Sửa thông tin tài khoản">
+                        <img src="@Url.Content(Session["Image"].ToString())"
+                             width="40"
+                             height="40"
+                             style="border-radius:50%;margin-right:10px;" />
+                    </a>
+                    <a href="@Url.Action("Index", "Order")" class="fm-cart" title="Giỏ hàng của tôi">
+                        <i class="fa-solid fa-bag-shopping"></i>
+                    </a>
+                    <a href="@Url.Action("MyOrders", "Order")" class="fm-cart" title="Đơn hàng của tôi" style="margin:7px">
+                        <i class="fa-solid fa-layer-group"></i>
+                    </a>
+                    <span class="fm-hello">
+                        Hello: @Session["UserName"]
+                        @Html.ActionLink("Logout", "Logout", "Login", null, new { @class = "fm-login" })
+                    </span>
+                }
+
+            </li>
+        </ol>
+    </nav>
+    <div class="container">
+       
+        <div class="content">
+            @RenderBody()
+        </div>
+    </div>
+    <script>
+        function toggleMenu() {
+            document.getElementById("fm-menu").classList.toggle("fm-menu");
+        }
+    </script>
+</body>
+</html>

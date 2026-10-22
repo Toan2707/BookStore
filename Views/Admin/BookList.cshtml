@@ -1,0 +1,147 @@
+﻿@model IEnumerable<Demo1.Models.Book>
+@{
+    ViewBag.Title = "Book";
+    Layout = "~/Views/Shared/Admin.cshtml";
+}
+<link href="~/Content/BookStore/HomePage.css" rel="stylesheet" />
+<link rel="stylesheet" href="~/Content//bootstrap.min.css" />
+<link href="~/Content/BookStore/SOFM.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link href="~/Content/BookStore/AdminStyle.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@600;700;800;900&display=swap" rel="stylesheet">
+<div class="admin-confirm-wrapper">
+    <div class="admin-confirm-box-2">
+        <h2>BOOK ADMIN</h2>
+        <div class="search-center">
+            @using (Html.BeginForm("BookList", "Admin", FormMethod.Get, new { @class = "admin-search" }))
+            {
+                <input type="text" name="keyword" value="@ViewBag.Keyword" placeholder="Tìm theo tên sách..." />
+                <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+            }
+            @Html.ActionLink("Thêm sách mới", "BookADD", "Admin", (object)null, new { @class = "btn-admin-primary btn-add-book" })
+        </div>
+
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Ảnh</th>
+                    <th>Tên sách</th>
+                    <th>Tác giả</th>
+                    <th>Thể loại</th>
+                    <th>Giá</th>
+                    <th>Tồn kho</th>
+                    <th>Trạng thái</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var b in Model)
+                {
+                    <tr>
+                        <td>@b.BookID</td>
+                        <td>
+                            <img src="@Url.Content(string.IsNullOrEmpty(b.Image) ? "~/image/no-image.jpg" : b.Image)"
+                                 width="40" height="55" style="object-fit:cover;border-radius:4px" />
+                        </td>
+                        <td>@b.BookName</td>
+                        <td>@(b.Author != null ? b.Author.AuthorName : "")</td>
+                        <td>@(b.Category != null ? b.Category.CategoryName : "")</td>
+                        <td>@b.Price.ToString("N0") đ</td>
+                        <td>@b.Quantity</td>
+                        <td>
+                            @if (b.Status == true)
+                            {
+                                <span class="admin-badge admin-badge-active">Đang bán</span>
+                            }
+                            else
+                            {
+                                <span class="admin-badge admin-badge-inactive">Đã ẩn</span>
+                            }
+                        </td>
+                        <td class="admin-row-actions">
+                            <ol class="fm-menu-2">
+                                <li class="item-menu">
+                                    @Html.ActionLink("Sửa", "BookEdit", new { id = b.BookID }, new { @class = "btn-admin-edit" })
+                                </li>
+                                <li class="item-menu-2">
+                                    @Html.ActionLink("Xoá", "BookDelete", new { id = b.BookID }, new { @class = "btn-admin-edit" })
+                                </li>
+                            </ol>
+
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="admin-empty">Không tìm thấy sách nào.</div>
+}
+@if (TempData["Success5"] != null)
+{
+    <script>
+     window.onload = function () {
+         Swal.fire({
+             icon: 'success',
+             title: "Delete Thành công",
+             text: '@TempData["Success5"]',
+             confirmButtonClick: 'OK',
+             allowOutsideClick: false
+         }).then((result) => {
+             if (result.isConfirmed) {
+                 window.location.hred = '@Url.Action("BookList","Admin")';
+             }
+         })
+     }
+    </script>
+}
+@if (TempData["Success11"] != null)
+{
+    <script>
+     window.onload = function () {
+         Swal.fire({
+             icon: 'success',
+             title: "Delete Thành công",
+             text: '@TempData["Success11"]',
+             confirmButtonClick: 'OK',
+             allowOutsideClick: false
+         }).then((result) => {
+             if (result.isConfirmed) {
+                 window.location.hred = '@Url.Action("BookList","Admin")';
+             }
+         })
+     }
+    </script>
+}
+@if (TempData["Success12"] != null)
+{
+    <script>
+     window.onload = function () {
+         Swal.fire({
+             icon: 'success',
+             title: "Update Thành công",
+             text: '@TempData["Success12"]',
+             confirmButtonClick: 'OK',
+             allowOutsideClick: false
+         }).then((result) => {
+             if (result.isConfirmed) {
+                 window.location.hred = '@Url.Action("BookList","Admin")';
+             }
+         })
+     }
+    </script>
+}
+@if (TempData["Error"] != null)
+{
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Lỗi',
+            text: '@TempData["Error"]'
+        });
+    </script>
+}

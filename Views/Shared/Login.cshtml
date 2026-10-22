@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link href="~/Content/BookStore/SOFM.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/js/all.min.js"></script>
+</head>
+<body>
+    
+    <div class="icon-show" onclick="toggleMenu()">
+        <i class="fa-solid fa-bars"> </i>
+    </div>
+    <nav>
+        <ol id="fm-menu" class="fm-menu">
+            <img class="logo" src="~/image/logoBS.png" />
+            <li class="item-menu">
+                @Html.ActionLink("Home", "BS", "HomePage")
+            </li>
+            <li class="item-menu">
+                @Html.ActionLink("Book", "Book", "HomePage")
+            </li>
+            <li class="item-menu">
+                @Html.ActionLink("About", "About", "HomePage")
+            </li>
+            <li class="item-menu">
+                @Html.ActionLink("Contact", "Contact", "HomePage")
+            </li>
+        </ol>
+    </nav>
+
+    <script>
+        function toggleMenu() {
+            document.getElementById("fm-menu").classList.toggle("fm-menu");
+        }
+    </script>
+    <div class="content">
+        @RenderBody()
+    </div>
+    <script>
+        function toggleMenu() {
+            document.getElementById("fm-menu").classList.toggle("fm-menu");
+        }
+    </script>
+</body>
+</html>

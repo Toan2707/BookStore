@@ -1,0 +1,180 @@
+﻿@model Demo1.Models.Book
+
+@{
+    ViewBag.Title = "Chi tiết sách";
+    Layout = "~/Views/Shared/Product.cshtml";
+}
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link href="~/Content/BookStore/HomePage.css" rel="stylesheet" />
+<link rel="stylesheet" href="~/Content//bootstrap.min.css" />
+<link href="~/Content/BookStore/AdminStyle.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@600;700;800;900&display=swap" rel="stylesheet">
+
+    <div class="admin-page-wrap">
+
+    <div class="admin-form">
+
+        <div class="admin-form-header">
+            <h2>Chi tiết sách</h2>
+            <br />
+            <p style="text-align:center;font-weight:bold">
+                Thông tin chi tiết sách — BS
+            </p>
+        </div>
+
+        <div class="admin-form-body">
+
+            <div class="bs-card" style="height:670px; overflow:visible;">
+
+                <div class="bs-card-img">
+                    @if (Model.Quantity <= 0)
+                    {
+                        <span class="bs-badge-sold">Hết hàng</span>
+                    }
+
+                    <img src="@Url.Content(
+                        string.IsNullOrEmpty(Model.Image)
+                            ? "~/image/no-image.jpg"
+                            : Model.Image)"
+                         alt="@Model.BookName" />
+                </div>
+
+                <div class="bs-card-body">
+
+                    <h3>@Model.BookName</h3>
+
+                    <p class="bs-card-author">
+                        Tác giả:
+                        @(Model.Author != null
+                            ? Model.Author.AuthorName
+                            : "Đang cập nhật")
+                    </p>
+
+                    <div class="bs-card-price">
+                        @Model.Price.ToString("N0") đ
+                    </div>
+
+                    <p>
+                        <strong>Thể loại:</strong>
+                        @(Model.Category != null
+                            ? Model.Category.CategoryName
+                            : "Đang cập nhật")
+                    </p>
+
+                    <p>
+                        <strong>Nhà xuất bản:</strong>
+                        @(Model.Publisher != null
+                            ? Model.Publisher.PublisherName
+                            : "Đang cập nhật")
+                    </p>
+
+                    <p>
+                        <strong>Năm xuất bản:</strong>
+                        @Model.PublishYear
+                    </p>
+
+                    <p>
+                        <strong>Số lượng:</strong>
+                        @Model.Quantity
+                    </p>
+
+                    <h3>Mô tả sách</h3>
+
+                    <p>
+                        @(string.IsNullOrWhiteSpace(Model.Description)
+                            ? "Chưa có mô tả cho sách này."
+                            : Model.Description)
+                    </p>
+
+                </div>
+
+                <div class="bs-card-actions" style="overflow:visible; height:auto;">
+
+                    @if (Model.Quantity > 0)
+                    {
+                        @Html.ActionLink(
+                            "Mua ngay",
+                            "BuyNow",
+                            "Order",
+                            new { bookId = Model.BookID },
+                            new { @class = "btn-admin-primary btn-add-book" }
+                        )
+
+                        <button type="button"
+                                class="btn-add-cart"
+                                onclick="addToCart(@Model.BookID)">
+                            <i class="fa-solid fa-cart-plus"></i>
+                        </button>
+                    }
+                    else
+                    {
+                        <button type="button"
+                                class="btn-buy-now"
+                                disabled>
+                            Hết hàng
+                        </button>
+                    }
+
+                    @Html.ActionLink(
+                        "Quay lại",
+                        "Book",
+                        "HomePage",
+                        null,
+                        new { @class = "btn-admin-primary" }
+                    )
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    function addToCart(bookId) {
+
+        fetch('@Url.Action("AddToCart", "Order")', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: 'bookId=' + bookId + '&quantity=1'
+        })
+        .then(r => r.json())
+        .then(data => {
+
+            if (data.success) {
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Đã thêm vào giỏ hàng',
+                    timer: 1200,
+                    showConfirmButton: false
+                });
+
+            } else {
+
+                Swal.fire({
+                    icon: data.needLogin ? 'warning' : 'error',
+                    title: data.needLogin
+                        ? 'Vui lòng đăng nhập'
+                        : 'Có lỗi xảy ra',
+                    text: data.message,
+                    confirmButtonText: 'OK'
+                }).then(res => {
+
+                    if (data.needLogin && res.isConfirmed) {
+                        window.location.href =
+                            '@Url.Action("Login", "Login")';
+                    }
+
+                });
+            }
+
+        });
+    }
+</script>
